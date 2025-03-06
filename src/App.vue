@@ -1,17 +1,29 @@
 <script setup>
 import { ref } from "vue";
 const showModal = ref(false);
-const newNote = ref("hi");
-
+const notes = ref([]);
+const newNote = ref("");
 function handleSaveNote() {
-  // newNote;
+  notes.value.push({
+    id: Math.floor(Math.random() * 100000000),
+    text: newNote.value,
+    date: new Date(),
+    backgroudColor: getRandomLightColor(),
+  });
+  showModal.value = false;
+  newNote.value = "";
+}
+function getRandomLightColor() {
+  const hue = Math.floor(Math.random() * 360); // Random hue value between 0 and 360
+  const saturation = Math.floor(Math.random() * 25) + 75; // Saturation between 75% and 100%
+  const lightness = Math.floor(Math.random() * 25) + 75; // Lightness between 75% and 100%
+  return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 }
 </script>
 <template>
   <main>
     <div v-if="showModal" class="overlay">
       <div class="modal">
-        {{ newNote }}
         <textarea name="note" id="note" cols="30" rows="10" v-model="newNote"></textarea>
         <button v-on:click="handleSaveNote">Add Note</button>
         <button v-on:click="showModal = false" class="close">Close</button>
@@ -23,19 +35,9 @@ function handleSaveNote() {
         <button v-on:click="showModal = true">+</button>
       </header>
       <div class="cards-container">
-        <div class="card">
-          <p class="main-text">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quasi corporis amet
-            perspiciatis, libero est!
-          </p>
-          <p class="date">04/27/6853</p>
-        </div>
-        <div class="card">
-          <p class="main-text">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quasi corporis amet
-            perspiciatis, libero est!
-          </p>
-          <p class="date">04/27/6853</p>
+        <div v-for="(note, index) in notes" :key="index" class="card">
+          <p class="main-text">{{ note.text }}</p>
+          <p class="date">{{ note.date }}</p>
         </div>
       </div>
     </div>
