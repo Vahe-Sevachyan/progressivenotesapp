@@ -8,16 +8,18 @@ function handleSaveNote() {
     id: Math.floor(Math.random() * 100000000),
     text: newNote.value,
     date: new Date(),
-    backgroudColor: getRandomLightColor(),
+    backgroundColor: getRandomLightColor(),
   });
   showModal.value = false;
   newNote.value = "";
 }
+
 function getRandomLightColor() {
   const hue = Math.floor(Math.random() * 360); // Random hue value between 0 and 360
   const saturation = Math.floor(Math.random() * 25) + 75; // Saturation between 75% and 100%
   const lightness = Math.floor(Math.random() * 25) + 75; // Lightness between 75% and 100%
   return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+  // return "hsla(" + Math.random() * 360 + ", 100%, 50%, 1)";
 }
 </script>
 <template>
@@ -35,7 +37,12 @@ function getRandomLightColor() {
         <button v-on:click="showModal = true">+</button>
       </header>
       <div class="cards-container">
-        <div v-for="(note, index) in notes" :key="index" class="card">
+        <div
+          v-for="(note, index) in notes"
+          :key="index"
+          class="card"
+          :style="{ backgroundColor: note.backgroundColor }"
+        >
           <p class="main-text">{{ note.text }}</p>
           <p class="date">{{ note.date }}</p>
         </div>
@@ -83,7 +90,7 @@ header button {
 .card {
   width: 225px;
   height: 225px;
-  background-color: rgb(237, 182, 44);
+  /* background-color: rgb(237, 182, 44); */
   padding: 10px;
   border-radius: 15px;
   display: flex;
